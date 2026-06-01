@@ -16,7 +16,7 @@ const base = {
 
 export const SERVICES: Service[] = [
   { name: "Backend API", url: base.backend + "/health" },
-  { name: "Server-Pool agent #1", url: base.pool1 + "/health" },
-  { name: "Server-Pool agent #2", url: base.pool2 + "/health" },
-  { name: "Server-Pool agent #3", url: base.pool3 + "/health" },
+  { name: "Server-Pool agent #1", url: base.pool1 + "/metrics" },
+  { name: "Server-Pool agent #2", url: base.pool2 + "/metrics" },
+  { name: "Server-Pool agent #3", url: base.pool3 + "/metrics" },
 ];
