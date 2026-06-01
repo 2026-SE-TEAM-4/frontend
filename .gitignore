@@ -1,0 +1,27 @@
+# Claude (로컬 전용, 공유하지 않음)
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+
+# 의존성 / 빌드 산출물
+node_modules/
+dist/
+dist-ssr/
+*.tsbuildinfo
+
+# 환경 변수
+.env
+.env.*
+!.env.example
+
+# 로그
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS / 에디터
+.DS_Store
+*.local
+.idea/
+.vscode/
