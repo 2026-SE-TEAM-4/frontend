@@ -1,0 +1,6 @@
+# 프론트엔드: 빌드 후 nginx로 서빙. 호스트 5173에 노출(dev 포트와 맞춤).
+services:
+  frontend:
+    build: .
+    ports:
+      - "5173:80"
