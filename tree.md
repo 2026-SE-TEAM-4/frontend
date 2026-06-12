@@ -1,42 +1,48 @@
 # frontend 디렉토리 구조
 
-React 18 + Vite + TypeScript 기반 SPA. 기초공사 단계이며, 메인 페이지는 서비스
-연결 상태만 표시한다.
+React 18 + Vite + TypeScript SPA. 백엔드와 연동되는 운영툴 화면(Style A)을
+기능별 폴더로 구성한다.
 
-파일은 기능 추가에 따라 바뀌지만, 아래 구조는 가능한 고정한다.
 새 파일을 추가하기 전에 어느 폴더에 속하는지 본 문서로 확인한다.
 구조를 바꿔야 하면 코드보다 먼저 본 문서를 갱신한다.
 
 ```text
 frontend/
-├── public/                    # 정적 자산 (후속)
+├── public/                    # 정적 자산
 ├── src/
-│   ├── main.tsx               # React 진입점
-│   ├── App.tsx                # 메인 페이지 (서비스 연결 상태)
-│   ├── index.css              # Tailwind 지시문 + 디자인 토큰 + Pretendard
-│   ├── components/ui/         # shadcn/ui 컴포넌트 (badge 등)
-│   ├── config/                # 설정 (services.ts: 상태 점검 대상)
-│   └── lib/                   # 공용 유틸 (utils.ts: cn)
+│   ├── main.tsx               # 진입점 (BrowserRouter + AuthProvider)
+│   ├── App.tsx                # 라우트 정의 + 보호/역할 가드
+│   ├── index.css              # Tailwind 지시문 + Style A 토큰
+│   ├── types/api.ts           # 백엔드 응답 타입
+│   ├── lib/                   # api(fetch 래퍼·ApiError) · auth · format · utils
+│   ├── context/               # AuthContext (로그인·세션)
+│   ├── hooks/                 # useApi · useNotificationsSocket
+│   ├── routes/                # RequireAuth · RequireRole · nav(역할별 메뉴)
+│   ├── components/ui/         # Style A 프리미티브(Button·Input·Field·Segmented·
+│   │                          #   StatusBadge·UsageBars·Table·Notice·Spinner)
+│   ├── layout/                # AppShell · Topbar · Sidebar · TraceBar · PageHead
+│   ├── features/              # 화면(기능별)
+│   │   ├── auth/              #   LoginPage(C1) · SignupPage(C2, 역할 지정)
+│   │   ├── servers/           #   ServerListPage(S2) · useServers
+│   │   ├── reservations/      #   ReservePage(S4) · MyReservationsPage(S5)
+│   │   ├── notifications/     #   AlertsPage(S6)
+│   │   └── dashboard/         #   DashboardPage(S1)
+│   ├── components/ComingSoon  # 역할 전용 화면 자리(후속 계획)
+│   └── test/                  # vitest setup · MSW 서버
+├── docs/superpowers/          # 설계 spec · 구현 계획
 ├── index.html                 # Pretendard 웹폰트 link 포함
 ├── vite.config.ts             # Vite + @ 별칭(src)
+├── vitest.config.ts           # jsdom · MSW setup
 ├── tailwind.config.js         # Tailwind v3 + shadcn 토큰
-├── postcss.config.js
-├── components.json            # shadcn 설정
-├── tsconfig.json
 ├── package.json
 ├── Dockerfile                 # build(node) → nginx
-├── nginx.conf
-├── docker-compose.yml
-├── .env.example
-├── README.md
-├── CLAUDE.md                  # 작업 시작 시 참조
-├── tree.md                    # 본 파일
-└── rule.md                    # 코딩 규칙
+├── README.md · CLAUDE.md · tree.md · rule.md
 ```
 
 ## 레이어 책임 요약
 
-- `App.tsx` 는 화면 조립만 한다. 데이터 호출 로직이 커지면 `hooks/` 로 분리한다.
-- `components/ui/` 는 shadcn/ui 프리미티브. 직접 만든 컴포넌트는 도메인 폴더에 둔다.
-- `config/` 는 환경·상수. 비즈니스 로직을 넣지 않는다.
-- `lib/` 는 순수 유틸. UI·상태에 의존하지 않는다.
+- `App.tsx` 는 라우팅만. 화면은 `features/`, 셸은 `layout/`.
+- `components/ui/` 는 프리미티브(도메인 무관). 도메인 컴포넌트는 해당 `features/` 폴더에.
+- `lib/` 는 순수 유틸·API 클라이언트. UI·상태에 의존하지 않는다.
+- `hooks/` 는 데이터·부수효과(조회·WS). `context/` 는 전역 상태(인증).
+- 색·간격은 `index.css`의 Style A 토큰(`var(--…)`)을 쓰고 하드코딩하지 않는다.
