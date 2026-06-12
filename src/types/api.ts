@@ -81,3 +81,75 @@ export interface Notification {
   read_at: string | null;
   created_at: string;
 }
+
+export interface ApprovalRequest {
+  id: number;
+  requester_id: number;
+  approver_id: number | null;
+  server_id: number;
+  requested_start: string;
+  requested_end: string;
+  reason: string | null;
+  status: string;
+  requested_at: string;
+  decided_at: string | null;
+  decided_by: string | null;
+}
+
+export interface Quota {
+  id: number;
+  user_id: number;
+  user_name: string;
+  team_id: number;
+  limit: number;
+  used: number;
+  version: number;
+}
+
+// --- 운영(ADM) ---
+export interface OpsDashboard {
+  scheduler: { ucId: string; lastRun: string | null; success: boolean; processed: number }[];
+  metrics: { successRate: number; missing: string[] };
+  autoActions: { reclaimed: number; expired: number; autoRejected: number };
+  health: { 정상: number; 주의: number; 위험: number };
+}
+
+export interface AvailabilityRow {
+  id: number;
+  uptime: number;
+  mtbf: number | null;
+  mttr: number | null;
+  riskBadge: boolean;
+}
+export interface AvailabilityResponse {
+  servers: AvailabilityRow[];
+  systemAvailability: number;
+}
+
+export interface Incident {
+  id: number;
+  severity: string;
+  status: string;
+  anomalyCount: number;
+  serverIds: number[];
+  startedAt: string;
+  resolvedAt: string | null;
+}
+export interface IncidentListResponse {
+  noiseReductionRate: number;
+  incidents: Incident[];
+}
+
+export interface HealthTrendPoint {
+  ts: string;
+  healthScore: number;
+}
+export interface HealthTrend {
+  serverId: number;
+  healthScore: number | null;
+  riskScore: number | null;
+  trend: string;
+  etaToRisk: string | null;
+  history: HealthTrendPoint[];
+  drivers: string[];
+}

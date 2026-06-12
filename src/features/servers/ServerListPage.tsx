@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/Button";
 import { Notice } from "@/components/ui/Notice";
@@ -114,7 +114,11 @@ export function ServerListPage() {
           ) : (
             servers.map((s) => (
               <tr key={s.id} className="hover:bg-[#fbfcfe]">
-                <Td className="font-semibold">{s.name}</Td>
+                <Td className="font-semibold">
+                  <Link to={`/servers/${s.id}`} className="text-[var(--acc)] hover:underline">
+                    {s.name}
+                  </Link>
+                </Td>
                 <Td>
                   <StatusBadge status={s.status} />
                 </Td>
