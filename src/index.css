@@ -40,6 +40,17 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* 건강점수 색 구간 (lib/format.healthClass 반환값) */
+.h-ok {
+  color: var(--ok);
+}
+.h-md {
+  color: var(--rsv);
+}
+.h-bad {
+  color: var(--dng);
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
