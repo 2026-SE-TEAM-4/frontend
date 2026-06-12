@@ -36,12 +36,15 @@ export interface ServerSpec {
   gpuModel: string | null;
 }
 
-export interface ServerListItem {
+export interface ServerDetailResponse {
   id: number;
   name: string;
   status: ServerStatus;
   spec: ServerSpec;
   healthScore: number | null;
+}
+
+export interface ServerListItem extends ServerDetailResponse {
   occupant: string | null;
 }
 
