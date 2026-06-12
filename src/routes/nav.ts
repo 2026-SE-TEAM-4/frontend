@@ -29,6 +29,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { to: "/approvals", label: "승인함", icon: "✓" },
       { to: "/quota", label: "Quota 관리", icon: "▣" },
+      { to: "/team-usage", label: "팀 사용 현황", icon: "▥" },
     ],
   },
   {
