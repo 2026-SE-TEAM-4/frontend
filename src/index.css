@@ -2,6 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Style A 디자인 토큰 (출처: diagram-and-docs/frontend-design/index.html).
+   기존 shadcn HSL 토큰과 별개로, 운영툴 톤 화면이 직접 참조한다. */
+:root {
+  --bg: #fff;
+  --soft: #f8f9fa;
+  --soft2: #f1f3f5;
+  --text: #212529;
+  --text2: #343a40;
+  --mut: #6c757d;
+  --bd: #dee2e6;
+  --bd2: #e9ecef;
+  --acc: #0d6efd;
+  --accs: #e7f1ff;
+  --acct: #084298;
+  --ok: #198754;
+  --oks: #d1e7dd;
+  --use: #0d6efd;
+  --uses: #e7f1ff;
+  --rsv: #b07d05;
+  --rsvs: #fff3cd;
+  --mnt: #6c757d;
+  --mnts: #eceef0;
+  --dng: #dc3545;
+  --dngs: #f8d7da;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+body {
+  background: var(--soft);
+  color: var(--text);
+  font-feature-settings: "tnum";
+  -webkit-font-smoothing: antialiased;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
