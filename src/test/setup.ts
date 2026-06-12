@@ -1,4 +1,7 @@
 import "@testing-library/jest-dom/vitest";
+import { afterAll, afterEach, beforeAll } from "vitest";
+
+import { server } from "./server";
 
 // Node 26 은 실험적 전역 localStorage 를 노출하는데 --localstorage-file 없이는
 // 동작하지 않고 jsdom 의 것을 가린다. 테스트용 인메모리 구현으로 덮어쓴다.
@@ -29,3 +32,10 @@ Object.defineProperty(globalThis, "localStorage", {
   configurable: true,
   writable: true,
 });
+
+beforeAll(() => server.listen({ onUnhandledRequest: "bypass" }));
+afterEach(() => {
+  server.resetHandlers();
+  localStorage.clear();
+});
+afterAll(() => server.close());
