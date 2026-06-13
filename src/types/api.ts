@@ -128,6 +128,53 @@ export interface Quota {
   version: number;
 }
 
+// --- 보안 관제(ADM) ---
+export type SecurityEventType =
+  | "LOGIN_FAILURE"
+  | "ACCOUNT_LOCKED"
+  | "ACCESS_DENIED"
+  | "ADMIN_ACTION"
+  | "AGENT_UNREACHABLE";
+
+export type SecuritySeverity = "INFO" | "WARNING" | "CRITICAL";
+
+export type SecurityAlertType = "BRUTE_FORCE" | "ACCESS_ABUSE" | "AGENT_DOWN" | "ADMIN_ABUSE";
+
+export type SecurityAlertStatus = "OPEN" | "RESOLVED";
+
+export interface SecurityEvent {
+  id: number;
+  eventType: SecurityEventType;
+  severity: SecuritySeverity;
+  actorId: number | null;
+  sourceIp: string | null;
+  identifier: string | null;
+  targetType: string | null;
+  targetId: string | null;
+  detail: Record<string, unknown> | null;
+  occurredAt: string;
+}
+
+export interface SecurityAlert {
+  id: number;
+  alertType: SecurityAlertType;
+  severity: SecuritySeverity;
+  status: SecurityAlertStatus;
+  subject: string;
+  eventCount: number;
+  message: string;
+  startedAt: string;
+  resolvedAt: string | null;
+  resolvedBy: number | null;
+}
+
+export interface SecuritySummary {
+  todayEvents: number;
+  openAlerts: number;
+  criticalAlerts: number;
+  bruteForceSuspects: number;
+}
+
 // --- 운영(ADM) ---
 export interface OpsDashboard {
   scheduler: { ucId: string; lastRun: string | null; success: boolean; processed: number }[];
