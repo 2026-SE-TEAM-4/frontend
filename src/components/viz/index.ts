@@ -14,4 +14,4 @@ export { Heatmap } from "./Heatmap";
 export { UptimeRibbon } from "./UptimeRibbon";
 export type { DayState } from "./UptimeRibbon";
 export { CorrelationTimeline } from "./CorrelationTimeline";
-export { Tabs } from "./Tabs";
+export { Tabs, SegmentedControl } from "./Tabs";

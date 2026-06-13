@@ -23,14 +23,14 @@ export function Heatmap({ rows, cols, cells, legend = true, unit = "%" }: Heatma
         style={{ gridTemplateColumns: `minmax(96px, max-content) repeat(${cols.length}, 1fr)` }}
       >
         <div />
-        {cols.map((c) => (
-          <div key={c} className="text-center text-[10px] text-[var(--g-mut)]">
+        {cols.map((c, ci) => (
+          <div key={ci} className="text-center text-[10px] text-[var(--g-mut)]">
             {c}
           </div>
         ))}
 
         {rows.map((row, ri) => (
-          <RowCells key={row} row={row} values={cells[ri] ?? []} unit={unit} />
+          <RowCells key={ri} row={row} values={cells[ri] ?? []} unit={unit} />
         ))}
       </div>
 

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Notice } from "@/components/ui/Notice";
 import { RefreshBar } from "@/components/ui/RefreshBar";
 import { Spinner } from "@/components/ui/Spinner";
@@ -9,6 +11,7 @@ import {
   Heatmap,
   KpiTile,
   Panel,
+  SegmentedControl,
   StatusChip,
   Tabs,
 } from "@/components/viz";
@@ -31,11 +34,25 @@ import {
 // 모든 패널이 30초 주기로 함께 갱신된다.
 const REFRESH_MS = 3_000;
 
+// 히트맵 기준 시간 옵션. key는 백엔드 window 파라미터와 그대로 맞춘다.
+type HeatWindow = "1h" | "6h" | "12h" | "24h";
+const HEAT_WINDOWS: { key: HeatWindow; label: string }[] = [
+  { key: "1h", label: "1시간" },
+  { key: "6h", label: "6시간" },
+  { key: "12h", label: "12시간" },
+  { key: "24h", label: "24시간" },
+];
+
 export function OpsDashboardPage() {
+  const [heatWindow, setHeatWindow] = useState<HeatWindow>("12h");
+
   const servers = useApi<ServerListResponse>("/servers", REFRESH_MS);
   const dashboard = useApi<OpsDashboard>("/ops/dashboard", REFRESH_MS);
   const incidents = useApi<IncidentListResponse>("/ops/incidents", REFRESH_MS);
-  const heatmap = useApi<OpsHeatmapResponse>("/ops/metrics/heatmap?metric=GPU&window=12h", REFRESH_MS);
+  const heatmap = useApi<OpsHeatmapResponse>(
+    `/ops/metrics/heatmap?metric=GPU&window=${heatWindow}`,
+    REFRESH_MS,
+  );
 
   const serverList: OpsServerItem[] = servers.data?.servers ?? [];
   const openIncidents = (incidents.data?.incidents ?? []).filter((i) => i.status !== "RESOLVED");
@@ -91,7 +108,15 @@ export function OpsDashboardPage() {
               >
                 {{
                   table: <FleetTable servers={serverList} />,
-                  heat: <HeatmapTab data={heatmap.data} loading={heatmap.loading} error={!!heatmap.error} />,
+                  heat: (
+                    <HeatmapTab
+                      data={heatmap.data}
+                      loading={heatmap.loading}
+                      error={!!heatmap.error}
+                      window={heatWindow}
+                      onWindowChange={setHeatWindow}
+                    />
+                  ),
                 }}
               </Tabs>
             </Panel>
@@ -232,10 +257,39 @@ function HeatmapTab({
   data,
   loading,
   error,
+  window,
+  onWindowChange,
 }: {
   data: OpsHeatmapResponse | null;
   loading: boolean;
   error: boolean;
+  window: HeatWindow;
+  onWindowChange: (window: HeatWindow) => void;
+}) {
+  return (
+    <div>
+      <div className="mb-3 flex justify-end">
+        <SegmentedControl
+          tabs={HEAT_WINDOWS}
+          active={window}
+          onSelect={(key) => onWindowChange(key as HeatWindow)}
+        />
+      </div>
+      <HeatmapBody data={data} loading={loading} error={error} window={window} />
+    </div>
+  );
+}
+
+function HeatmapBody({
+  data,
+  loading,
+  error,
+  window,
+}: {
+  data: OpsHeatmapResponse | null;
+  loading: boolean;
+  error: boolean;
+  window: HeatWindow;
 }) {
   if (loading && !data) return <Spinner />;
   if (error) return <Notice tone="error">히트맵 데이터를 불러오지 못했습니다.</Notice>;
@@ -243,10 +297,13 @@ function HeatmapTab({
     return <p className="py-6 text-center text-[13px] text-[var(--g-mut)]">히트맵 데이터가 없습니다.</p>;
   }
 
+  // 1·6시간 범위는 버킷이 시간 미만이라 같은 "시"가 반복된다. 이때만 분까지 표시한다.
+  const withMinutes = window === "1h" || window === "6h";
+
   return (
     <Heatmap
       rows={data.serverNames}
-      cols={data.buckets.map(formatBucketHour)}
+      cols={data.buckets.map((b) => formatBucketHour(b, withMinutes))}
       cells={normalizeCells(data.cells)}
       unit="%"
     />

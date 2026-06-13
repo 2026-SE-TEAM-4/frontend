@@ -83,10 +83,12 @@ export function normalizeCells(cells: (number | null)[][]): number[][] {
   return cells.map((row) => row.map((v) => (v === null ? 0 : v)));
 }
 
-// 버킷 ISO 타임스탬프 → "HH시" 같은 시각 라벨.
-export function formatBucketHour(ts: string): string {
+// 버킷 ISO 타임스탬프 → 시각 라벨.
+// 버킷이 시간 미만(짧은 범위)이면 "5:10"처럼 분까지, 그 외엔 "5시"로 보여준다.
+export function formatBucketHour(ts: string, withMinutes = false): string {
   const d = new Date(ts);
   if (Number.isNaN(d.getTime())) return ts;
+  if (withMinutes) return `${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
   return `${d.getHours()}시`;
 }
 

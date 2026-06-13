@@ -17,7 +17,8 @@ interface TabsProps {
   children: Partial<Record<string, ReactNode>>;
 }
 
-function TabBar({
+// 탭 바만 따로 쓰고 싶을 때(예: 같은 패널에서 내용은 그대로 두고 옵션만 고를 때) 재사용한다.
+export function SegmentedControl({
   tabs,
   active,
   onSelect,
@@ -63,7 +64,7 @@ export function Tabs({ tabs, value, onChange, defaultValue, children }: TabsProp
 
   return (
     <div>
-      <TabBar tabs={tabs} active={active} onSelect={select} />
+      <SegmentedControl tabs={tabs} active={active} onSelect={select} />
       <div className="mt-3">{children[active]}</div>
     </div>
   );
