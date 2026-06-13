@@ -31,6 +31,7 @@ describe("AdminServersPage", () => {
       </MemoryRouter>,
     );
     await screen.findByText("gpu-01");
+    await userEvent.click(screen.getByRole("button", { name: "+ 서버 추가" }));
     await userEvent.type(screen.getByLabelText("이름"), "gpu-09");
     await userEvent.type(screen.getByLabelText("IP"), "10.0.0.9");
     await userEvent.click(screen.getByRole("button", { name: "서버 등록" }));
@@ -48,7 +49,8 @@ describe("AdminServersPage", () => {
       </MemoryRouter>,
     );
     await screen.findByText("gpu-01");
-    await userEvent.click(screen.getByRole("button", { name: "gpu-01 삭제" }));
+    await userEvent.click(screen.getByRole("button", { name: "편집" }));
+    await userEvent.click(await screen.findByRole("button", { name: "gpu-01 삭제" }));
     expect(await screen.findByText(/활성 예약이 있어/)).toBeInTheDocument();
   });
 });

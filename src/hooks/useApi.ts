@@ -6,6 +6,7 @@ interface State<T> {
   data: T | null;
   loading: boolean;
   error: ApiError | null;
+  lastUpdatedAt: Date | null;
 }
 
 export function useApi<T>(path: string | null, refetchInterval?: number): State<T> & { refetch: () => void } {
@@ -13,16 +14,17 @@ export function useApi<T>(path: string | null, refetchInterval?: number): State<
     data: null,
     loading: path !== null,
     error: null,
+    lastUpdatedAt: null,
   });
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
     if (path === null) return;
     let active = true;
-    setState((s) => ({ ...s, loading: true, error: null }));
+    setState((s) => ({ ...s, loading: s.data === null, error: null }));
     apiFetch<T>(path)
-      .then((data) => active && setState({ data, loading: false, error: null }))
-      .catch((e) => active && setState({ data: null, loading: false, error: e as ApiError }));
+      .then((data) => active && setState({ data, loading: false, error: null, lastUpdatedAt: new Date() }))
+      .catch((e) => active && setState((s) => ({ ...s, loading: false, error: e as ApiError })));
     return () => {
       active = false;
     };

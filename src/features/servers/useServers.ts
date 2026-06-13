@@ -16,7 +16,7 @@ export function useServers() {
   const qs = new URLSearchParams();
   if (filters.status !== "ALL") qs.set("status", filters.status);
   qs.set("sort", filters.sort);
-  const { data, loading, error, refetch } = useApi<ServerListResponse>(`/servers?${qs.toString()}`);
+  const { data, loading, error, refetch } = useApi<ServerListResponse>(`/servers?${qs.toString()}`, 5_000);
 
   return {
     servers: data?.servers ?? [],

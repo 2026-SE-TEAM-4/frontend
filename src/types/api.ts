@@ -36,16 +36,38 @@ export interface ServerSpec {
   gpuModel: string | null;
 }
 
+export interface LatestMetric {
+  cpuUsage: number;
+  memUsage: number;
+  netUsage: number;
+  gpuUsage: number | null;
+  status: string;
+  collectedAt: string;
+}
+
 export interface ServerDetailResponse {
   id: number;
   name: string;
   status: ServerStatus;
   spec: ServerSpec;
   healthScore: number | null;
+  // 백엔드가 /servers/{id} 에서 함께 내려주는 부가 필드. 기존 소비자 호환을 위해 옵셔널.
+  ip?: string | null;
+  groupName?: string | null;
+  occupant?: string | null;
+  riskScore?: number | null;
+  etaToRisk?: string | null;
+  latestMetric?: LatestMetric | null;
 }
 
 export interface ServerListItem extends ServerDetailResponse {
   occupant: string | null;
+  latestMetric: LatestMetric | null;
+  // /servers 응답에서 함께 내려오는 부가 필드(없으면 화면에서 "—").
+  ip?: string | null;
+  groupName?: string | null;
+  riskScore?: number | null;
+  etaToRisk?: string | null;
 }
 
 export interface ServerListResponse {

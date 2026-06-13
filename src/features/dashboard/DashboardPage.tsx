@@ -25,9 +25,9 @@ function Stat({ value, label, to, color }: { value: number; label: string; to: s
 
 export function DashboardPage() {
   const { user } = useAuth();
-  const servers = useApi<ServerListResponse>("/servers");
-  const reservations = useApi<Reservation[]>("/reservations");
-  const notifications = useApi<Notification[]>("/notifications");
+  const servers = useApi<ServerListResponse>("/servers", 10_000);
+  const reservations = useApi<Reservation[]>("/reservations", 15_000);
+  const notifications = useApi<Notification[]>("/notifications", 10_000);
 
   const loading = servers.loading || reservations.loading || notifications.loading;
 

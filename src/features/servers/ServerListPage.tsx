@@ -11,6 +11,12 @@ import { TraceBar } from "@/layout/TraceBar";
 import type { ServerStatus } from "@/types/api";
 import { useServers, type StatusFilter } from "./useServers";
 
+function usageClass(pct: number): string {
+  if (pct >= 90) return "text-[var(--dng)]";
+  if (pct >= 70) return "text-[var(--rsv)]";
+  return "text-[var(--ok)]";
+}
+
 const STATUS_FILTERS: { key: StatusFilter; label: string }[] = [
   { key: "ALL", label: "전체" },
   { key: "AVAILABLE", label: "가용" },
@@ -101,6 +107,8 @@ export function ServerListPage() {
               <Th>서버</Th>
               <Th>상태</Th>
               <Th>사양</Th>
+              <Th>CPU</Th>
+              <Th>MEM</Th>
               <Th>건강</Th>
               <Th>점유자</Th>
               <Th />
@@ -125,6 +133,16 @@ export function ServerListPage() {
                 <Td className="font-mono text-[11.5px] text-[var(--text2)]">
                   {s.spec.cpuCores}C · {s.spec.ramGb}GB
                   {s.spec.gpuModel ? ` · ${s.spec.gpuModel}` : ""}
+                </Td>
+                <Td className="font-mono text-[12px]">
+                  {s.latestMetric?.status === "OK"
+                    ? <span className={usageClass(s.latestMetric.cpuUsage)}>{s.latestMetric.cpuUsage.toFixed(1)}%</span>
+                    : <span className="text-[var(--mut)]">—</span>}
+                </Td>
+                <Td className="font-mono text-[12px]">
+                  {s.latestMetric?.status === "OK"
+                    ? <span className={usageClass(s.latestMetric.memUsage)}>{s.latestMetric.memUsage.toFixed(1)}%</span>
+                    : <span className="text-[var(--mut)]">—</span>}
                 </Td>
                 <Td>
                   <span className={`font-mono text-[13px] font-bold ${healthClass(s.healthScore)}`}>

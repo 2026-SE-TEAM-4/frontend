@@ -20,6 +20,11 @@ frontend/
 │   ├── routes/                # RequireAuth · RequireRole · nav(역할별 메뉴)
 │   ├── components/ui/         # Style A 프리미티브(Button·Input·Field·Segmented·
 │   │                          #   StatusBadge·UsageBars·Table·Notice·Spinner)
+│   ├── components/viz/        # 운영 오버홀 공용 시각화(KpiTile·Panel·StatusChip·
+│   │                          #   BulletBar·Sparkline·HealthBreakdown·MetricTimeSeries·
+│   │                          #   ForecastCorridor·Heatmap·UptimeRibbon·
+│   │                          #   CorrelationTimeline·Tabs · index 배럴)
+│   ├── theme/                 # ThemeContext(data-theme + localStorage) · ThemeToggle
 │   ├── layout/                # AppShell · Topbar · Sidebar · TraceBar · PageHead
 │   ├── features/              # 화면(기능별)
 │   │   ├── admin/             #   AccountsPage(F20) · AdvancedPage(F35 고급 초기화)

@@ -7,7 +7,7 @@ import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 
 export function AppShell() {
-  const { data, refetch } = useApi<Notification[]>("/notifications");
+  const { data, refetch } = useApi<Notification[]>("/notifications", 10_000);
   useNotificationsSocket(refetch);
   const unread = (data ?? []).filter((n) => n.read_at === null).length;
 

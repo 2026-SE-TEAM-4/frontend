@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/context/AuthContext";
+import { ThemeToggle } from "@/theme/ThemeToggle";
 
 const ROLE_LABEL: Record<string, string> = { STU: "학생·연구원", MGR: "팀 관리자", ADM: "서버 관리자" };
 
@@ -31,6 +32,7 @@ export function Topbar({ unread = 0 }: { unread?: number }) {
         </span>
       )}
       <div className="flex items-center gap-2.5">
+        <ThemeToggle />
         <span className="grid h-[30px] w-[30px] place-items-center rounded-full bg-[var(--accs)] text-[12px] font-bold text-[var(--acct)]">
           {initials}
         </span>
@@ -45,7 +47,7 @@ export function Topbar({ unread = 0 }: { unread?: number }) {
         </div>
         <button
           onClick={handleLogout}
-          className="ml-1.5 cursor-pointer rounded-[7px] border border-[var(--bd)] bg-white px-2.5 py-1.5 text-[12px] font-semibold text-[var(--text2)] hover:bg-[var(--soft)]"
+          className="ml-1.5 cursor-pointer rounded-[7px] border border-[var(--bd)] bg-[var(--bg)] px-2.5 py-1.5 text-[12px] font-semibold text-[var(--text2)] hover:bg-[var(--soft)]"
         >
           로그아웃
         </button>
