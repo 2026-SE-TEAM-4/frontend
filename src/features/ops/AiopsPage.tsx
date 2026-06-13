@@ -13,7 +13,7 @@ const SEV_CLASS: Record<string, string> = {
 };
 
 export function AiopsPage() {
-  const { data, loading, error } = useApi<IncidentListResponse>("/ops/incidents");
+  const { data, loading, error } = useApi<IncidentListResponse>("/ops/incidents", 30_000);
 
   return (
     <div>

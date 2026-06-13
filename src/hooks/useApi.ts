@@ -8,7 +8,7 @@ interface State<T> {
   error: ApiError | null;
 }
 
-export function useApi<T>(path: string | null): State<T> & { refetch: () => void } {
+export function useApi<T>(path: string | null, refetchInterval?: number): State<T> & { refetch: () => void } {
   const [state, setState] = useState<State<T>>({
     data: null,
     loading: path !== null,
@@ -27,6 +27,12 @@ export function useApi<T>(path: string | null): State<T> & { refetch: () => void
       active = false;
     };
   }, [path, tick]);
+
+  useEffect(() => {
+    if (refetchInterval == null || path === null) return;
+    const id = setInterval(() => setTick((t) => t + 1), refetchInterval);
+    return () => clearInterval(id);
+  }, [path, refetchInterval]);
 
   const refetch = useCallback(() => setTick((t) => t + 1), []);
   return { ...state, refetch };

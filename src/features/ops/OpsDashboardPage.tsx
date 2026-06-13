@@ -27,7 +27,7 @@ function Metric({ value, label, color }: { value: number | string; label: string
 }
 
 export function OpsDashboardPage() {
-  const { data, loading, error } = useApi<OpsDashboard>("/ops/dashboard");
+  const { data, loading, error } = useApi<OpsDashboard>("/ops/dashboard", 30_000);
 
   return (
     <div>

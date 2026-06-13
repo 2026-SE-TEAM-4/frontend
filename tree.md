@@ -22,6 +22,7 @@ frontend/
 │   │                          #   StatusBadge·UsageBars·Table·Notice·Spinner)
 │   ├── layout/                # AppShell · Topbar · Sidebar · TraceBar · PageHead
 │   ├── features/              # 화면(기능별)
+│   │   ├── admin/             #   AccountsPage(F20) · AdvancedPage(F35 고급 초기화)
 │   │   ├── auth/              #   LoginPage(C1) · SignupPage(C2, 역할 지정)
 │   │   ├── servers/           #   ServerListPage(S2) · useServers
 │   │   ├── reservations/      #   ReservePage(S4) · MyReservationsPage(S5)

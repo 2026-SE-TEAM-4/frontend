@@ -19,6 +19,7 @@ import { OpsDashboardPage } from "@/features/ops/OpsDashboardPage";
 import { AvailabilityPage } from "@/features/ops/AvailabilityPage";
 import { AiopsPage } from "@/features/ops/AiopsPage";
 import { AccountsPage } from "@/features/admin/AccountsPage";
+import { AdvancedPage } from "@/features/admin/AdvancedPage";
 
 export default function App() {
   return (
@@ -49,6 +50,7 @@ export default function App() {
             <Route path="/ops/aiops" element={<AiopsPage />} />
             <Route path="/admin/servers" element={<AdminServersPage />} />
             <Route path="/admin/accounts" element={<AccountsPage />} />
+            <Route path="/admin/advanced" element={<AdvancedPage />} />
           </Route>
         </Route>
       </Route>

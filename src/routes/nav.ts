@@ -41,6 +41,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { to: "/ops/aiops", label: "AIOps", icon: "◵" },
       { to: "/admin/servers", label: "서버 관리", icon: "▧" },
       { to: "/admin/accounts", label: "계정 잠금", icon: "⚿" },
+      { to: "/admin/advanced", label: "고급", icon: "⚙" },
     ],
   },
 ];

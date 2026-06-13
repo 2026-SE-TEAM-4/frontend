@@ -7,7 +7,7 @@ import { useApi } from "@/hooks/useApi";
 import type { AvailabilityResponse } from "@/types/api";
 
 export function AvailabilityPage() {
-  const { data, loading, error } = useApi<AvailabilityResponse>("/ops/availability");
+  const { data, loading, error } = useApi<AvailabilityResponse>("/ops/availability", 5_000);
 
   return (
     <div>
