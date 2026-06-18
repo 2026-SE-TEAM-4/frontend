@@ -91,7 +91,7 @@ function buildTimeline(incident: IncidentSummaryRow, anomalies: Anomaly[]) {
           {
             leftPct: Math.min(...ticks.map((t) => t.posPct)),
             rightPct: Math.max(...ticks.map((t) => t.posPct)),
-            label: `${anomalies.length}개 → INC-${incident.id}`,
+            label: `이상 ${anomalies.length}건 묶음`,
           },
         ]
       : [];
@@ -136,23 +136,28 @@ function HeroStrip({ list }: { list: IncidentListResp }) {
   return (
     <div className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
       <KpiTile
-        label="노이즈 감소"
+        label="노이즈 감소 (중복 알림 줄이기)"
         value={`${Math.round(rate * 100)}`}
         unit="%"
-        delta={`${rawAnomalies}건 이상 → ${grouped}건 인시던트`}
+        delta={`이상 ${rawAnomalies}건 → 인시던트 ${grouped}건`}
         deltaTone="down"
       />
       <KpiTile
-        label="열린 인시던트"
+        label="열린 인시던트 (진행 중 장애)"
         value={open.length}
         delta={`위험 ${crit} · 주의 ${warn}`}
         deltaTone={crit > 0 ? "up" : "neutral"}
       />
-      <KpiTile label="탐지 방식" value="μ±2σ" delta="7일 베이스라인 z-score" deltaTone="neutral" />
+      <KpiTile
+        label="감지 기준"
+        value="평소값 기준"
+        delta="최근 7일 평균에서 크게 벗어나면 이상으로 감지"
+        deltaTone="neutral"
+      />
       <KpiTile
         label="위험 서버"
         value={riskServers.size}
-        delta="열린 인시던트 영향 서버"
+        delta="진행 중 장애가 가리키는 서버"
         deltaTone={riskServers.size > 0 ? "up" : "neutral"}
       />
     </div>
@@ -210,7 +215,7 @@ function IncidentList({
   onSelect: (id: number) => void;
 }) {
   return (
-    <Panel title="인시던트" sub={`${list.incidents.length}건 · 30초마다 갱신`}>
+    <Panel title="인시던트 (장애 묶음)" sub={`${list.incidents.length}건 · 3초마다 갱신`}>
       {list.incidents.length === 0 ? (
         <p className="py-6 text-center text-[14px] text-[var(--g-mut)]">인시던트가 없습니다.</p>
       ) : (
@@ -278,7 +283,7 @@ function PrimaryMetricChart({
 
   return (
     <Panel
-      title="대표 메트릭 추세"
+      title="대표 사용량 추세 (메트릭)"
       sub={`서버 ${primary.serverId} · ${primary.metric} · 최근 6시간`}
     >
       {loading && <Spinner />}
@@ -313,7 +318,10 @@ function IncidentDetail({ incidentId }: { incidentId: number }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <Panel title="상관 타임라인" sub={`이상 ${anomalies.length}건을 한 인시던트로 묶음`}>
+      <Panel
+        title="상관 타임라인 (관련 이상 묶음)"
+        sub={`서로 관련 있는 이상 ${anomalies.length}건을 한 인시던트로 묶었습니다`}
+      >
         <DetailHeader incident={incident} />
         {anomalies.length > 0 ? (
           <CorrelationTimeline ticks={ticks} groups={groups} />
@@ -356,8 +364,8 @@ export function AiopsPage() {
         entity="Incident · AnomalyRecord · Forecast"
       />
       <PageHead
-        title="AIOps 모니터링"
-        desc="이상탐지를 상관 분석한 인시던트입니다. 인시던트를 고르면 근거와 LLM 근본 원인을 확인할 수 있습니다."
+        title="AIOps 모니터링 (자동 장애 감지)"
+        desc="평소와 다르게 튄 값(이상)을 자동으로 찾아, 서로 관련 있는 것끼리 묶은 장애 묶음(인시던트)입니다. 인시던트를 고르면 묶은 근거와 AI가 추정한 근본 원인(진짜 원인)을 볼 수 있습니다."
         actions={<RefreshBar lastUpdatedAt={lastUpdatedAt} loading={loading} onRefresh={refetch} />}
       />
 

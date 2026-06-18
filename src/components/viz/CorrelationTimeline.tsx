@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import type { StatusTone } from "./StatusChip";
 
 interface Tick {
@@ -40,19 +42,29 @@ export function CorrelationTimeline({ ticks, groups }: CorrelationTimelineProps)
         ))}
       </div>
 
-      <div className="relative mt-1 h-[22px]">
-        {groups.map((g, i) => (
-          <div
-            key={i}
-            className="absolute top-0"
-            style={{ left: `${g.leftPct}%`, width: `${Math.max(0, g.rightPct - g.leftPct)}%` }}
-          >
-            <div className="h-[6px] border-x border-b border-[var(--g-acc)]" />
-            <div className="mt-0.5 text-center text-[11px] font-semibold text-[var(--g-acc)]">
-              {g.label}
-            </div>
-          </div>
-        ))}
+      {/* 브래킷(구간 표시)과 라벨을 분리한다. 라벨을 구간 폭(0일 수 있음)에 가두면
+          글자가 세로로 줄바꿈되며 레이아웃이 깨지므로, 라벨은 구간 중앙에 nowrap 으로
+          따로 띄우고 위치를 8~92%로 제한해 가장자리에서 잘리지 않게 한다. */}
+      <div className="relative mt-1 h-[24px]">
+        {groups.map((g, i) => {
+          const width = Math.max(0, g.rightPct - g.leftPct);
+          const mid = g.leftPct + width / 2;
+          const labelPct = Math.min(92, Math.max(8, mid));
+          return (
+            <Fragment key={i}>
+              <div
+                className="absolute top-0 h-[6px] border-x border-b border-[var(--g-acc)]"
+                style={{ left: `${g.leftPct}%`, width: `${width}%` }}
+              />
+              <span
+                className="absolute top-[9px] -translate-x-1/2 whitespace-nowrap text-[11px] font-semibold text-[var(--g-acc)]"
+                style={{ left: `${labelPct}%` }}
+              >
+                {g.label}
+              </span>
+            </Fragment>
+          );
+        })}
       </div>
     </div>
   );

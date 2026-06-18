@@ -49,7 +49,7 @@ export function RootCauseCard({ summary, loading, error }: Props) {
   const right = summary ? <ModelChip model={summary.model} /> : undefined;
 
   return (
-    <Panel title="LLM 근본 원인" sub="이상탐지 근거 기반 자동 분석" right={right}>
+    <Panel title="AI 근본 원인 (진짜 원인 추정)" sub="감지된 이상을 근거로 AI가 자동 분석" right={right}>
       {loading && <p className="text-[14px] text-[var(--g-mut)]">분석을 불러오는 중…</p>}
 
       {!loading && error && error.status === 404 && (
@@ -68,7 +68,7 @@ export function RootCauseCard({ summary, loading, error }: Props) {
           </section>
 
           <section className="mt-4">
-            <h3 className="text-[13px] font-bold uppercase tracking-wide text-[var(--g-mut)]">근본 원인</h3>
+            <h3 className="text-[13px] font-bold uppercase tracking-wide text-[var(--g-mut)]">근본 원인 (진짜 원인)</h3>
             <ul className="mt-2 space-y-2.5">
               {summary.rootCauses.map((rc, i) => (
                 <li
