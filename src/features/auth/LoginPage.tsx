@@ -8,13 +8,17 @@ import { Notice } from "@/components/ui/Notice";
 import { useAuth } from "@/context/AuthContext";
 import { ApiError } from "@/lib/api";
 
-const DEMO_PASSWORD = "password123";
+// 데모 로그인은 개발/시연 빌드에서만 노출한다. 프로덕션 빌드에서는
+// import.meta.env.DEV 가 false 로 치환되어 버튼·비밀번호 문자열이 번들에서 제거된다.
+const DEMO_PASSWORD = import.meta.env.DEV ? "password123" : "";
 
-const DEMO_ACCOUNTS: { role: string; email: string }[] = [
-  { role: "STU", email: "hong@example.com" },
-  { role: "MGR", email: "kim@example.com" },
-  { role: "ADM", email: "admin@example.com" },
-];
+const DEMO_ACCOUNTS: { role: string; email: string }[] = import.meta.env.DEV
+  ? [
+      { role: "STU", email: "hong@example.com" },
+      { role: "MGR", email: "kim@example.com" },
+      { role: "ADM", email: "admin@example.com" },
+    ]
+  : [];
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -96,25 +100,27 @@ export function LoginPage() {
           {busy ? "확인 중…" : "로그인"}
         </Button>
 
-        <div className="mt-5 border-t border-dashed border-[var(--bd)] pt-4">
-          <p className="mb-2 text-center text-[11.5px] font-semibold text-[var(--mut)]">
-            데모 로그인 (과제 시연용)
-          </p>
-          <div className="grid grid-cols-3 gap-2">
-            {DEMO_ACCOUNTS.map((acc) => (
-              <Button
-                key={acc.role}
-                type="button"
-                variant="outline"
-                className="py-2 text-[12px]"
-                disabled={busy}
-                onClick={() => runLogin(acc.email, DEMO_PASSWORD)}
-              >
-                {acc.role}
-              </Button>
-            ))}
+        {import.meta.env.DEV && (
+          <div className="mt-5 border-t border-dashed border-[var(--bd)] pt-4">
+            <p className="mb-2 text-center text-[11.5px] font-semibold text-[var(--mut)]">
+              데모 로그인 (과제 시연용)
+            </p>
+            <div className="grid grid-cols-3 gap-2">
+              {DEMO_ACCOUNTS.map((acc) => (
+                <Button
+                  key={acc.role}
+                  type="button"
+                  variant="outline"
+                  className="py-2 text-[12px]"
+                  disabled={busy}
+                  onClick={() => runLogin(acc.email, DEMO_PASSWORD)}
+                >
+                  {acc.role}
+                </Button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <p className="mt-4 text-center text-[12.5px] text-[var(--mut)]">
           계정이 없나요?{" "}
