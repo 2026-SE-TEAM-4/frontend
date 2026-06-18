@@ -8,6 +8,14 @@ import { Notice } from "@/components/ui/Notice";
 import { useAuth } from "@/context/AuthContext";
 import { ApiError } from "@/lib/api";
 
+const DEMO_PASSWORD = "password123";
+
+const DEMO_ACCOUNTS: { role: string; email: string }[] = [
+  { role: "STU", email: "hong@example.com" },
+  { role: "MGR", email: "kim@example.com" },
+  { role: "ADM", email: "admin@example.com" },
+];
+
 export function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -16,12 +24,11 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
+  async function runLogin(loginEmail: string, loginPassword: string) {
     setError(null);
     setBusy(true);
     try {
-      await login(email, password);
+      await login(loginEmail, loginPassword);
       navigate("/", { replace: true });
     } catch (err) {
       const msg =
@@ -34,6 +41,11 @@ export function LoginPage() {
     } finally {
       setBusy(false);
     }
+  }
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    await runLogin(email, password);
   }
 
   return (
@@ -83,6 +95,27 @@ export function LoginPage() {
         <Button type="submit" variant="pri" className="w-full py-2.5" disabled={busy}>
           {busy ? "확인 중…" : "로그인"}
         </Button>
+
+        <div className="mt-5 border-t border-dashed border-[var(--bd)] pt-4">
+          <p className="mb-2 text-center text-[11.5px] font-semibold text-[var(--mut)]">
+            데모 로그인 (과제 시연용)
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            {DEMO_ACCOUNTS.map((acc) => (
+              <Button
+                key={acc.role}
+                type="button"
+                variant="outline"
+                className="py-2 text-[12px]"
+                disabled={busy}
+                onClick={() => runLogin(acc.email, DEMO_PASSWORD)}
+              >
+                {acc.role}
+              </Button>
+            ))}
+          </div>
+        </div>
+
         <p className="mt-4 text-center text-[12.5px] text-[var(--mut)]">
           계정이 없나요?{" "}
           <Link to="/signup" className="font-semibold text-[var(--acc)]">
